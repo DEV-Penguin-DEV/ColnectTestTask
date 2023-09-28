@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Element Counter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Acme&family=Karantina:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <h1 class="main-title">HTML Element Counter</h1>
+    <form class="search-form" id="elementCounterForm">
+        <div class="search-form__input-container">
+            <label for="url">URL:</label>
+            <input type="url" id="url" name="url" required>
+        </div>
+        <div class="search-form__input-container">
+            <label for="element">Element:</label>
+            <input type="text" id="element" name="element" required>
+        </div>
+
+        <button class="search-form__button" type="submit">Count Elements</button>
+    </form>
+    <div class="result" id="responseArea">
+        <h2 class="result__title">Result</h2>
+        <div class="result__fields-container">
+            <div class="result-field">
+                <h3 class="result-field__title">URL</h3>
+                <p class="result-field__text result-field__text--url"></p>
+            </div>
+            <div class="result-field">
+                <h3 class="result-field__title">Fetched on</h3>
+                <p class="result-field__text result-field__text--date"></p>
+            </div>
+            <div class="result-field">
+                <h3 class="result-field__title">Search time</h3>
+                <p class="result-field__text result-field__text--search"></p>
+            </div>
+        </div>
+
+    </div>
+    <script src="bundle.js"></script>
+</body>
+
+</html>
