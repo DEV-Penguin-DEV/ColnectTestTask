@@ -1,86 +1,81 @@
 <?php
-// Create a MySQL connection here
-// ...
+require_once 'config.php'; // Include the database configuration file
+require_once 'functions.php'; // Include function file
 
-// Function to fetch the HTML content of a URL
-function fetchUrl($url)
-{
-    $ch = curl_init();
-
-    // Set cURL options, including the user agent to mimic a real browser
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36');
-
-    $htmlContent = curl_exec($ch);
-
-    // Check for cURL errors
-    if (curl_errno($ch)) {
-        echo 'Curl error: ' . curl_error($ch);
-        return false;
-    }
-
-    curl_close($ch);
-
-    return $htmlContent; // HTML content as a string
-}
-
-// Function to count the specified HTML element
-function countElement($html, $element)
-{
-    $dom = new DOMDocument();
-    @$dom->loadHTML($html); // Use '@' to suppress warnings
-
-    $elementCount = $dom->getElementsByTagName($element)->length;
-    return $elementCount;
-}
-
-function generateResponseMessage($response)
-{
-    return "URL {$response['url']} Fetched on {$response['date']}, took {$response['response_time']}.\nElement <{$response['element']}> appeared {$response['element_count']} times on the page.";
-}
+// Initialize a response array with isError flag
+$response = ['isError' => false];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Retrieve URL and HTML element from the POST request
     $url = $_POST['url'];
     $element = $_POST['element'];
 
-    // Implement logic to check if the same request for the same URL and element
-    // was made within the last 5 minutes. If so, return the previous response.
+    $startTime = microtime(true); // Measure the start time for performance tracking
 
-    $startTime = microtime(true);
+    $htmlContent = fetchUrl($url); // Fetch HTML content from the specified URL
 
-    // Fetch the HTML content of the URL
-    $htmlContent = fetchUrl($url);
-
+    // Measure the end time and calculate the duration of the request
     $endTime = microtime(true);
-    $duration = round(($endTime - $startTime) * 1000); // Response time in msec
+    $duration = round(($endTime - $startTime) * 1000);
 
+    // Check if HTML content was successfully fetched
     if ($htmlContent) {
-        // Count the specified HTML element
-        $elementCount = countElement($htmlContent, $element);
+        $elementCount = countElement($htmlContent, $element); // Count the occurrences of the specified HTML element
 
-        // Implement database update logic here
-        // ...
+        $domainId = getDomainId($url, $conn); // Retrieve or create a domain ID based on the URL
 
-        // Calculate statistics (i, ii, iii, iv)
-        // ...
+        createOrUpdateUniqueUrl($domainId, $url, $conn); // Create or update a unique URL in the database
 
-        // Prepare the response
-        $response = [
+        logPageLoadTime($domainId, $duration, $conn); // Log the page load time in the database
+
+        addOrUpdateElement($element, $elementCount, $domainId, $conn); // Add or update the element in the database
+
+        // Prepare the response data
+        $response += [
+            // Searching url
             'url' => $url,
-            'date' => date('d/m/Y H:i'),
-            'response_time' => $duration . 'msec',
-            'element_count' => $elementCount,
-            'element' => htmlentities($element),
-        ];
 
-        // Return the response as JSON
-        header('Content-Type: application/json');
-        echo json_encode(['message' => generateResponseMessage($response)]);
+            // Searching date and time
+            'date' => date('d/m/Y H:i'),
+
+            // Searching duration 
+            'time' => $duration . 'msec',
+
+            // Searching result message
+            'message' => 'Element <' . htmlentities($element) . '> appeared ' . $elementCount . ' times in the page',
+
+            // Total uniq urls with one domain
+            'total_domain_urls' => getUniqueUrlCountForDomain($domainId, $conn),
+
+            // The average load time for the last 24 hours
+            'average_load_time' => getAverageLoadTimeLast24Hours($domainId, $conn) . 'msec',
+
+            // Domain name
+            'domain_name' => getDomainName($domainId, $conn),
+
+            // Total count of element with all domains during all time
+            'total_element_counts' => getElementCount($element, $conn),
+
+            // Total count of element with one domain during all time
+            'total_domain_element_counts' => getElementCount($element, $conn, $domainId),
+        ];
     } else {
-        echo 'Invalid URL or HTML content.';
+        // Handle the case where fetching HTML content failed
+        $response = [
+            'isError' => true,
+            'error_message' => 'Invalid URL or HTML content.',
+        ];
     }
 } else {
-    echo 'Invalid request method.';
+    // Handle the case of an invalid request method
+    $response = [
+        'isError' => true,
+        'error_message' => 'Invalid request method.',
+    ];
 }
+
+header('Content-Type: application/json'); // Put Content header
+echo json_encode($response); // Encode response
+
+$conn->close(); // Close the database connection
 ?>

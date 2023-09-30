@@ -1,0 +1,11 @@
+.statistics {
+  & .response-block-field {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  & .loader {
+    right: auto;
+    left: 20px;
+  }
+}

@@ -1,0 +1,16 @@
+.response-block {
+  &:not(:last-of-type) {
+    margin-bottom: 50px;
+  }
+}
+
+.response-block__title {
+  margin-bottom: 40px;
+}
+
+.response-block__fields-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+}

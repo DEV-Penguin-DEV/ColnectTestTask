@@ -8,42 +8,88 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Acme&family=Karantina:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
-    <h1 class="main-title">HTML Element Counter</h1>
-    <form class="search-form" id="elementCounterForm">
-        <div class="search-form__input-container">
-            <label for="url">URL:</label>
-            <input type="url" id="url" name="url" required>
-        </div>
-        <div class="search-form__input-container">
-            <label for="element">Element:</label>
-            <input type="text" id="element" name="element" required>
-        </div>
+    <div class="body-container">
+        <h1 class="main-title">HTML Element Counter</h1>
+        <form class="search-form" id="elementCounterForm">
+            <div class="search-form__input-container">
+                <label class="search-form__label" for="url">URL</label>
+                <input class="search-form__input" type="url" id="url" name="url" required>
+            </div>
+            <div class="search-form__input-container">
+                <label class="search-form__label" for="element">HTML Tag</label>
+                <input class="search-form__input" type="text" id="element" name="element" required>
+            </div>
 
-        <button class="search-form__button" type="submit">Count Elements</button>
-    </form>
-    <div class="result" id="responseArea">
-        <h2 class="result__title">Result</h2>
-        <div class="result__fields-container">
-            <div class="result-field">
-                <h3 class="result-field__title">URL</h3>
-                <p class="result-field__text result-field__text--url"></p>
+            <button class="search-form__button" type="submit">Search</button>
+        </form>
+        <div class="response-block result" id="responseArea">
+            <h2 class="response-block__title">Result</h2>
+            <div class="response-block__fields-container">
+                <div class="response-block-field">
+                    <h3 class="response-block-field__title">URL</h3>
+                    <p class="response-block-field__text response-block-field__text--url loading-element"></p>
+                </div>
+                <div class="response-block-field">
+                    <h3 class="response-block-field__title">Fetched on</h3>
+                    <p class="response-block-field__text response-block-field__text--date loading-element"></p>
+                </div>
+                <div class="response-block-field">
+                    <h3 class="response-block-field__title">Search time</h3>
+                    <p class="response-block-field__text response-block-field__text--time loading-element"></p>
+                </div>
+                <div class="response-block-field">
+                    <p class="response-block-field__text response-block-field__text--message loading-element"></p>
+                </div>
             </div>
-            <div class="result-field">
-                <h3 class="result-field__title">Fetched on</h3>
-                <p class="result-field__text result-field__text--date"></p>
-            </div>
-            <div class="result-field">
-                <h3 class="result-field__title">Search time</h3>
-                <p class="result-field__text result-field__text--search"></p>
-            </div>
-        </div>
 
+        </div>
+        <div class="response-block statistics" id="responseArea">
+            <h2 class="response-block__title title">General Statistics</h2>
+            <div class="response-block__fields-container">
+                <div class="response-block-field">
+                    <h3 class="response-block-field__title">Counts of URLs from
+                        <span class="response-block-field__domain">DOMAIN</span>
+                        have been checked till now
+                    </h3>
+                    <p class="response-block-field__text response-block-field__text--total-domain-urls loading-element">
+
+                    </p>
+                </div>
+                <div class="response-block-field">
+                    <h3 class="response-block-field__title">Average fetch time from <span
+                            class="response-block-field__domain">DOMAIN</span> (last 24h)
+                    </h3>
+                    <p class="response-block-field__text response-block-field__text--average-time loading-element"></p>
+                </div>
+                <div class="response-block-field">
+                    <h3 class="response-block-field__title">Total count of
+                        <span class="response-block-field__element">&lt;TAG&gt;</span></span>
+                        elements from
+                        <span class="response-block-field__domain">DOMAIN</span>
+                    </h3>
+                    <p
+                        class="response-block-field__text response-block-field__text--total-domain-elements-count loading-element">
+                    </p>
+                </div>
+                <div class="response-block-field">
+                    <h3 class="response-block-field__title">Total count of
+                        <span class="response-block-field__element">&lt;TAG&gt;</span>
+                        elements counted in all requests ever made.
+                    </h3>
+                    <p
+                        class="response-block-field__text response-block-field__text--total-elements-count loading-element">
+                    </p>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <script src="script.js"></script>
+
+    <script src="bundle.js"></script>
 </body>
 
 </html>
