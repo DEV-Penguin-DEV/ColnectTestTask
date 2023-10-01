@@ -37,6 +37,14 @@ During development I was using
 
 #### 5. Start localhost with php and mysql
 
+Open browser and go to http://localhost:{PORT}/phpMyAdmin/
+
+- Create a new database or use created but empty
+- Import sql file which be `backend/elements_counter.sql`
+- Go to `backend/config.php` and put our DB name, user password, user name, server name
+
+#### 6. Start localhost with php and mysql
+
 Open browser and go to http://localhost:{PORT}/front/build/
 
 ### Other project scripts
@@ -50,6 +58,22 @@ npm run lint:fix
 ```
 
 ### Other info about project
+
+### Project structure
+
+`Frontend (front/):`
+
+- `/public/` - Static data
+- `/src/js` - JavaScipt files
+- `/src/scss` - Styles with scss preprocessor
+- `/build/` - Output folder which created by webpack
+
+`Backend (backend/):`
+
+- `/config.php` - Database config
+- `/functions.php` - All needed functions
+- `/elements_counter.sql` - Database schema
+- `/elements_counter.php` - Main backend file which be a endpoint for searching request from front part
 
 #### Techical stack
 

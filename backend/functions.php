@@ -46,6 +46,8 @@ function countElement($html, $element)
     return $dom->getElementsByTagName($element)->length;
 }
 
+
+
 /**
  * Executes a prepared SQL query with parameters.
  *
@@ -130,9 +132,7 @@ function createOrUpdateUniqueUrl($domainId, $url, $conn)
     } else {
         // URL doesn't exist, insert it into the database
         $sql = "INSERT INTO unique_urls (domain_id, url) VALUES (?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("is", $domainId, $url);
-        $stmt->execute();
+        executeQuery($conn, $sql, "is", [$domainId, $url]);
         incrementUrlCount($domainId, $conn);
     }
 }
@@ -173,9 +173,7 @@ function logPageLoadTime($domainId, $loadTime, $conn)
 
     // Insert page load time into the database
     $sql = "INSERT INTO page_load_time (domain_id, load_time, load_datetime) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ids", $domainId, $loadTime, $currentDatetime);
-    $stmt->execute();
+    executeQuery($conn, $sql, "ids", [$domainId, $loadTime, $currentDatetime]);
 }
 
 /**
@@ -188,9 +186,7 @@ function incrementUrlCount($domainId, $conn)
 {
     // Increment the URL count for the domain
     $sql = "UPDATE url_count SET url_count = url_count + 1 WHERE domain_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $domainId);
-    $stmt->execute();
+    executeQuery($conn, $sql, "i", [$domainId]);
 }
 
 /**
@@ -212,15 +208,11 @@ function addOrUpdateElement($name, $count, $domain_id, $conn)
         $row = $result->fetch_assoc();
         $elementId = $row["id"];
         $sql = "UPDATE elements SET count = count + ? WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ii", $count, $elementId);
-        $stmt->execute();
+        executeQuery($conn, $sql, "ii", [$count, $elementId]);
     } else {
         // If the element doesn't exist, create a new element
         $sql = "INSERT INTO elements (name, count, domain_id) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sii", $name, $count, $domain_id);
-        $stmt->execute();
+        executeQuery($conn, $sql, "sii", [$name, $count, $domain_id]);
     }
 }
 
@@ -236,10 +228,10 @@ function addOrUpdateElement($name, $count, $domain_id, $conn)
 function getElementCount($name, $conn, $domainId = null)
 {
     if ($domainId != null) {
-        // Get the sum for a specific domain
+        // Get the total count of element for a specific domain
         $sql = "SELECT SUM(count) AS total_count FROM elements WHERE name = ? AND domain_id = ?";
     } else {
-        // Get the sum for all domains
+        // Get the total count of element for all domains
         $sql = "SELECT SUM(count) AS total_count FROM elements WHERE name = ?";
     }
 
