@@ -31,9 +31,9 @@ npm run build
 #### 4. Start localhost with php and mysql
 
 During development I was using
-`Localhost` - MAMP
-`PHP` - 7.4.33
-`MySQL version` - 5.7.39
+- `Localhost` - MAMP
+- `PHP` - 7.4.33
+- `MySQL version` - 5.7.39
 
 #### 5. Start localhost with php and mysql
 
