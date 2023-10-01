@@ -1,16 +1,14 @@
 {
-  "name": "blank",
-  "version": "1.0.0",
-  "description": "",
+  "name": "penguin-webpack",
+  "version": "1.5.0",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "lint": "eslint src/",
-    "lint:fix": "eslint --fix src/",
-    "image-compress": "node ./image-compress.js"
+    "lint:fix": "eslint --fix src/"
   },
-  "author": "",
+  "author": "Penguin DEV",
   "license": "ISC",
   "browserslist": [
     "> 1%",
@@ -33,14 +31,10 @@
     "cssnano": "^6.0.0",
     "eslint": "^8.39.0",
     "file-loader": "^6.2.0",
-    "giflossy": "^3.0.41",
-    "gifsicle": "^7.0.1",
-    "imagemin": "^8.0.1",
     "imagemin-mozjpeg": "^10.0.0",
     "imagemin-pngquant": "^9.0.2",
     "imagemin-svgo": "^10.0.1",
     "mini-css-extract-plugin": "^2.7.5",
-    "nodemon": "^2.0.22",
     "path": "^0.12.7",
     "postcss-loader": "^7.2.4",
     "postcss-preset-env": "^8.3.2",
